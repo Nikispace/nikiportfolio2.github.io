@@ -6,216 +6,257 @@
     <title>Nikitha | Creative Portfolio</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Michroma&family=Oxanium:wght@300;400;700&family=Quantico:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    
     <style>
-        body { font-family: 'Oxanium', sans-serif; scroll-behavior: smooth; background: #0f0f1a; color: #d1d5db; }
-        h1, h2, h3 { font-family: 'Michroma', sans-serif; }
-        
-        .bg-holographic {
-            background: radial-gradient(circle at 50% 50%, #1a1a2e 0%, #0f0f1a 100%);
+        :root {
+            --bg: #0e0f12;
+            --accent: 88, 101, 242;
+            --text: #e6e6e6;
+            --liquid-glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
         }
 
-        /* Glassmorphism for titles and cards */
-        .glass-title {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            padding: 1rem 2rem;
-            display: inline-block;
-            transition: all 0.4s ease;
+        body { 
+            margin: 0; padding: 0; 
+            background: var(--bg); 
+            color: var(--text); 
+            font-family: 'Oxanium', system-ui, sans-serif; 
+            overflow-x: hidden; 
+            scroll-behavior: smooth; 
         }
-        .glass-title:hover {
-            background: rgba(34, 211, 238, 0.1);
-            border-color: #22d3ee;
-            box-shadow: 0 0 20px rgba(34, 211, 238, 0.3);
+
+        h1, h2, h3 { font-family: 'Michroma', sans-serif; }
+
+        /* ================= BACKGROUND SYSTEM ================= */
+        .background { position: fixed; inset: 0; z-index: -5; overflow: hidden; }
+        .gradient {
+            position: absolute; inset: -50%;
+            background: radial-gradient(circle at 20% 20%, rgba(var(--accent), 0.12), transparent 40%),
+                        radial-gradient(circle at 80% 60%, rgba(0, 180, 160, 0.08), transparent 45%);
+            animation: drift 80s linear infinite;
+        }
+        @keyframes drift { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        
+        .cursor-glow {
+            position: absolute; width: 450px; height: 450px;
+            background: radial-gradient(circle, rgba(168, 85, 247, 0.1), transparent 70%);
+            border-radius: 50%; pointer-events: none; mix-blend-mode: soft-light;
+            transform: translate(-50%, -50%); z-index: -4;
+        }
+
+        .noise {
+            position: fixed; inset: 0; z-index: -3; opacity: 0.04; mix-blend-mode: overlay; pointer-events: none;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+        }
+
+        .particle { position: absolute; width: 2px; height: 2px; background: rgba(255,255,255,0.25); border-radius: 50%; z-index: -2; animation: float linear infinite; }
+        @keyframes float { from { transform: translateY(100vh); opacity: 0; } 10% { opacity: 0.4; } 90% { opacity: 0.4; } to { transform: translateY(-10vh); opacity: 0; } }
+
+        /* ================= LIQUID GLASS THEME ================= */
+        .liquid-glass {
+            background: var(--liquid-glass);
+            backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid var(--glass-border);
+            border-radius: 28px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        .liquid-glass:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(34, 211, 238, 0.4);
             transform: translateY(-5px);
         }
 
-        .glass-card {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 24px;
-            transition: all 0.3s ease;
+        /* ================= NEUMORPHIC BUTTONS ================= */
+        .neu-plus {
+            width: 60px; height: 60px;
+            background: #0e0f12;
+            border-radius: 50%;
+            display: flex; items-center: center; justify-content: center;
+            box-shadow: 8px 8px 16px #060608, -8px -8px 16px #16181c;
+            color: #a855f7; font-size: 2rem;
+            transition: all 0.2s ease; margin: 2rem auto;
+        }
+        .neu-plus:active {
+            box-shadow: inset 5px 5px 10px #060608, inset -5px -5px 10px #16181c;
+            transform: scale(0.95);
         }
 
-        /* Neon Purple Glows */
-        .neon-purple { text-shadow: 0 0 10px #a855f7, 0 0 20px #a855f7; }
-        
-        /* Lightbox pop-up */
-        #lightbox { transition: opacity 0.3s ease; }
+        /* ================= TEXT STYLES ================= */
+        .neon-gradient-text {
+            background: linear-gradient(90deg, #a855f7, #22d3ee, #a855f7);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shine 4s linear infinite;
+        }
+        @keyframes shine { to { background-position: 200% center; } }
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #0f0f1a; }
-        ::-webkit-scrollbar-thumb { background: #a855f7; border-radius: 10px; }
+        .glass-title-box {
+            padding: 1rem 2.5rem; border-radius: 12px;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.1);
+            display: inline-block;
+        }
     </style>
 </head>
-<body class="bg-holographic">
+<body>
 
-    <nav class="fixed top-0 w-full z-50 p-6 flex justify-between items-center bg-black/20 backdrop-blur-md">
-        <span class="text-xl font-bold tracking-tighter text-white neon-purple">NIKITHA</span>
-        <div class="space-x-6 hidden md:block uppercase text-xs tracking-widest">
-            <a href="#intro" class="hover:text-cyan-400 transition">Intro</a>
-            <a href="#past" class="hover:text-cyan-400 transition">Journey</a>
-            <a href="#tech" class="hover:text-cyan-400 transition">Knowledge</a>
-            <a href="#gallery" class="hover:text-cyan-400 transition">Gallery</a>
-        </div>
-    </nav>
+<div class="background">
+    <div class="gradient"></div>
+    <div class="cursor-glow" id="glow"></div>
+</div>
+<div class="noise"></div>
 
-    <section class="min-h-screen flex items-center justify-center p-6 pt-24">
-        <div class="glass-card p-12 max-w-4xl text-center">
-            <h1 class="text-2xl md:text-4xl font-bold mb-4 text-white leading-tight">
-                Welcome to my creative space… <br>
-                <span class="neon-purple">and I’m Nikitha.</span>
-            </h1>
-            <p class="font-mono text-cyan-400 tracking-widest uppercase mt-4">This is my personal portfolio</p>
-        </div>
-    </section>
-
-    <section id="intro" class="py-24 px-6">
-        <div class="max-w-4xl mx-auto text-center">
-            <h2 class="glass-title text-cyan-400 text-2xl mb-12 uppercase tracking-widest">Intro</h2>
-            <div class="glass-card p-10 text-lg leading-relaxed text-gray-300">
-                Hi, I’m Nikitha. I like learning new things, thinking a lot, and exploring ideas at my own pace. 
-                I enjoy good stories, taking pictures, spending time with nature, listening to music, learning tech and coding. 
-                Just figuring things out as I go.
-            </div>
-        </div>
-    </section>
-
-    <section id="past" class="py-24 px-6">
-        <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10">
-            <div class="space-y-6">
-                <h2 class="glass-title text-purple-400 text-xl uppercase">Past</h2>
-                <div class="glass-card p-8 min-h-[250px] border-l-4 border-purple-600">
-                    I started my academic journey from <span class="text-white">Doveton Oakley</span> and <span class="text-white">Doveton Girls Hr. Sec. School (ICSE)</span>, building a strong academic foundation while discovering my creativity. I developed my interest in English accents during this time. I completed my schooling at <span class="text-white">Everwin Vidhyasharam CBSE</span>, scoring <span class="text-white">94.2%</span> in 10th and <span class="text-white">89.4%</span> in 12th grade (CS-group). I cleared <span class="text-cyan-400 font-bold">JEE Mains 2025</span>.
-                </div>
-            </div>
-            <div class="space-y-6">
-                <h2 class="glass-title text-cyan-400 text-xl uppercase">Present</h2>
-                <div class="glass-card p-8 min-h-[250px] border-l-4 border-cyan-600">
-                    Right now, I'm pursuing <span class="text-white">BS Data Science at IIT Madras (Foundation : Term 2)</span> and <span class="text-white">B.E. CSE (First-year)</span> at <span class="text-white">Velammal Institute of Technology</span>. I am in a phase of exploration, understanding technology, creativity, and problem-solving. I like taking things step by step, allowing myself space to grow without rushing.
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="tech" class="py-24 px-6 bg-white/5">
-        <div class="max-w-4xl mx-auto text-center">
-            <h2 class="glass-title text-pink-400 text-2xl mb-12 uppercase">Technical Knowledge</h2>
-            <div class="glass-card p-10 text-left space-y-6">
-                <p class="text-lg">My current learning journey is driven by intense curiosity and hands-on experimentation. Currently, I am building my core skills in:</p>
-                <div class="flex flex-wrap gap-4">
-                    <span class="px-4 py-2 bg-purple-900/40 border border-purple-500 rounded-full text-sm">C Programming</span>
-                    <span class="px-4 py-2 bg-blue-900/40 border border-blue-500 rounded-full text-sm">HTML5 / CSS3</span>
-                    <span class="px-4 py-2 bg-yellow-900/40 border border-yellow-500 rounded-full text-sm">JavaScript</span>
-                    <span class="px-4 py-2 bg-cyan-900/40 border border-cyan-500 rounded-full text-sm">Google Cloud</span>
-                </div>
-                <p class="text-gray-300">
-                    Beyond traditional coding, I am deeply involved in <span class="text-white font-bold">AI Prompting</span> and the development of <span class="text-white font-bold">AI-powered websites</span>. I have experience building custom chatbots and exploring how AI can solve real-world problems. For me, tech is not just about syntax; it's about shaping ideas into functional digital solutions.
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <section id="gallery" class="py-24 px-6">
-        <div class="max-w-6xl mx-auto text-center">
-            <h2 class="glass-title text-white text-2xl mb-12">Gallery</h2>
-            <div id="gallery-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                </div>
-        </div>
-    </section>
-
-    <section id="quotes" class="py-24 px-6 bg-black/40">
-        <div class="max-w-6xl mx-auto text-center">
-            <h2 class="glass-title text-indigo-400 text-2xl mb-12">Quotes Collection</h2>
-            <div id="quotes-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                </div>
-            
-            <button id="add-quotes" class="mt-12 w-16 h-16 rounded-full bg-indigo-600 hover:bg-indigo-500 text-white text-3xl flex items-center justify-center mx-auto transition-all shadow-lg hover:rotate-90">
-                +
-            </button>
-        </div>
-    </section>
-
-    <div id="lightbox" class="fixed inset-0 bg-black/95 z-[100] hidden flex items-center justify-center p-4" onclick="closeLightbox()">
-        <img id="lightbox-img" src="" class="max-w-full max-h-[90vh] rounded-lg shadow-2xl transition-all duration-300 scale-95">
+<nav class="fixed top-0 w-full z-50 p-6 flex justify-between items-center bg-black/10 backdrop-blur-md border-b border-white/5">
+    <span class="text-xl font-bold tracking-tighter text-white neon-gradient-text">NIKITHA</span>
+    <div class="space-x-8 hidden md:flex text-xs tracking-widest uppercase">
+        <a href="#intro" class="hover:text-cyan-400 transition">Intro</a>
+        <a href="#journey" class="hover:text-cyan-400 transition">Journey</a>
+        <a href="#tech" class="hover:text-cyan-400 transition">Skills</a>
+        <a href="#gallery" class="hover:text-cyan-400 transition">Gallery</a>
     </div>
+</nav>
 
-    <footer class="py-20 text-center border-t border-white/5">
-        <div class="glass-card inline-block p-8 hover:border-cyan-500 transition-all">
-            <p class="mb-4">Connect with me</p>
-            <a href="#" class="text-cyan-400 font-bold hover:text-purple-400 transition-all">Instagram</a>
+<main class="relative z-10 px-6">
+    
+    <section class="min-h-screen flex items-center justify-center pt-20">
+        <div class="liquid-glass p-12 max-w-4xl text-center">
+            <h1 class="text-3xl md:text-5xl font-bold mb-6 leading-tight">
+                Welcome to my creative space… <br>
+                <span class="neon-gradient-text">and I’m Nikitha.</span>
+            </h1>
+            <p class="font-mono text-gray-500 tracking-[0.3em] uppercase">This is my personal portfolio</p>
         </div>
-        <p class="mt-10 text-xs text-gray-600">&copy; 2025 Nikitha. All Rights Reserved. No reuse or modification without written permission. </p>
-    </footer>
+    </section>
 
-    <script>
-        // Data configuration
-        const data = {
-            gallery: { gridId: 'gallery-grid', prefix: 'img', current: 1, total: 60 },
-            quotes: { gridId: 'quotes-grid', prefix: 'quote', current: 1, total: 27 }
-        };
+    <section id="intro" class="py-32 flex flex-col items-center">
+        <div class="glass-title-box mb-12"><h2 class="text-cyan-400 uppercase tracking-widest">Intro</h2></div>
+        <div class="liquid-glass p-10 max-w-4xl text-lg leading-relaxed text-gray-400 text-center">
+            Hi, I’m Nikitha. I like learning new things, thinking a lot, and exploring ideas at my own pace. 
+            I enjoy good stories, taking pictures, spending time with nature, listening to music, learning tech and coding. 
+            Just figuring things out as I go.
+        </div>
+    </section>
 
-        function createItem(prefix, index) {
-            const fileName = `${prefix}${index}.jpeg`;
-            const wrapper = document.createElement('div');
-            wrapper.className = "overflow-hidden glass-card aspect-square cursor-pointer group";
-            wrapper.innerHTML = `
-                <img src="${fileName}" loading="lazy" 
-                    onclick="openLightbox('${fileName}')"
-                    class="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
-                    onerror="this.src='https://via.placeholder.com/400?text=img+missing'">
-            `;
-            return wrapper;
-        }
+    <section id="journey" class="py-32 max-w-7xl mx-auto">
+        <div class="text-center mb-16">
+            <div class="glass-title-box"><h2 class="text-white uppercase tracking-widest">Past • Present • Future</h2></div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="liquid-glass p-8 border-l-4 border-purple-600">
+                <h3 class="text-purple-400 mb-4 uppercase text-sm">Past</h3>
+                <p class="text-sm text-gray-400">I started my academic journey from Doveton Oakley and Doveton Girls Hr. Sec. School (ICSE). I completed my schooling at Everwin Vidhyasharam CBSE, scoring 94.2% in 10th and 89.4% in 12th grade (CS-group). I cleared JEE Mains 2025.</p>
+            </div>
+            <div class="liquid-glass p-8 border-l-4 border-cyan-600">
+                <h3 class="text-cyan-400 mb-4 uppercase text-sm">Present</h3>
+                <p class="text-sm text-gray-400">Right now, I'm pursuing BS Data Science at IIT Madras (Foundation : Term 2) and B.E. CSE (First-year) at Velammal Institute of Technology. I am in a phase of exploration, allowing myself space to grow without rushing.</p>
+            </div>
+            <div class="liquid-glass p-8 border-l-4 border-pink-600">
+                <h3 class="text-pink-400 mb-4 uppercase text-sm">Future</h3>
+                <p class="text-sm text-gray-400">My goal is to continue developing my technical and creative skills while working on projects that challenge and inspire me. I want to grow into opportunities where I can contribute and shape ideas into impactful digital solutions.</p>
+            </div>
+        </div>
+    </section>
 
-        function loadBatch(type, amount) {
-            const config = data[type];
-            const grid = document.getElementById(config.gridId);
-            let added = 0;
-            
-            while (added < amount && config.current <= config.total) {
-                grid.appendChild(createItem(config.prefix, config.current));
-                config.current++;
-                added++;
-            }
-            
-            if (config.current > config.total && type === 'quotes') {
-                document.getElementById('add-quotes').style.display = 'none';
-            }
-        }
+    <section id="tech" class="py-32 flex flex-col items-center">
+        <div class="glass-title-box mb-12"><h2 class="text-pink-400 uppercase tracking-widest">Technical Knowledge</h2></div>
+        <div class="liquid-glass p-12 max-w-4xl w-full">
+            <p class="text-lg mb-8">My current learning journey is driven by intense curiosity. Currently building core skills in:</p>
+            <div class="flex flex-wrap gap-4 mb-8">
+                <span class="px-5 py-2 bg-white/5 border border-white/10 rounded-xl text-sm hover:border-purple-500 transition">C Programming</span>
+                <span class="px-5 py-2 bg-white/5 border border-white/10 rounded-xl text-sm hover:border-blue-500 transition">HTML5 / CSS3</span>
+                <span class="px-5 py-2 bg-white/5 border border-white/10 rounded-xl text-sm hover:border-yellow-500 transition">JavaScript</span>
+                <span class="px-5 py-2 bg-white/5 border border-white/10 rounded-xl text-sm hover:border-cyan-500 transition">Google Cloud</span>
+            </div>
+            <p class="text-gray-400 leading-relaxed">
+                Deeply involved in <span class="text-white">AI Prompting</span> and AI-powered websites. Experienced in building chatbots and exploring AI solutions. For me, tech is about shaping ideas into functional digital reality.
+            </p>
+        </div>
+    </section>
 
-        // Lightbox
-        const lb = document.getElementById('lightbox');
-        const lbImg = document.getElementById('lightbox-img');
+    <section id="gallery" class="py-32">
+        <div class="text-center mb-16">
+            <div class="glass-title-box"><h2 class="text-white uppercase tracking-widest">Gallery</h2></div>
+        </div>
+        <div id="gallery-grid" class="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-6xl mx-auto"></div>
+        <button id="add-gallery" class="neu-plus" onclick="loadBatch('gallery', 8)">+</button>
+    </section>
 
-        function openLightbox(src) {
-            lbImg.src = src;
-            lb.classList.remove('hidden');
-            setTimeout(() => lbImg.classList.remove('scale-95'), 10);
-            document.body.style.overflow = 'hidden';
-        }
+    <section id="quotes" class="py-32 bg-black/20">
+        <div class="text-center mb-16">
+            <div class="glass-title-box"><h2 class="text-indigo-400 uppercase tracking-widest">Quotes Collection</h2></div>
+        </div>
+        <div id="quotes-grid" class="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-6xl mx-auto"></div>
+        <button id="add-quotes" class="neu-plus" onclick="loadBatch('quotes', 8)">+</button>
+    </section>
 
-        function closeLightbox() {
-            lbImg.classList.add('scale-95');
-            setTimeout(() => { lb.classList.add('hidden'); document.body.style.overflow = 'auto'; }, 200);
-        }
+</main>
 
-        // Initialize
-        loadBatch('gallery', 12); // Initial Gallery
-        loadBatch('quotes', 6);    // Initial Quotes
+<div id="lightbox" class="fixed inset-0 bg-black/90 z-[100] hidden flex items-center justify-center p-4" onclick="closeLightbox()">
+    <img id="lightbox-img" src="" class="max-w-full max-h-[85vh] rounded-3xl shadow-2xl transition-transform duration-500 scale-90">
+</div>
 
-        // Event Listeners
-        document.getElementById('add-quotes').addEventListener('click', () => loadBatch('quotes', 6));
+<script>
+/* ================= INTERACTIVE BACKGROUND ================= */
+const glow = document.getElementById("glow");
+window.addEventListener("mousemove", e => {
+    glow.style.left = e.clientX + "px";
+    glow.style.top = e.clientY + "px";
+});
 
-        // Infinite Scroll for Gallery
-        window.onscroll = function() {
-            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 500) {
-                loadBatch('gallery', 4);
-            }
-        };
-    </script>
+const particleCount = 15;
+for (let i = 0; i < particleCount; i++) {
+    const p = document.createElement("div");
+    p.className = "particle";
+    p.style.left = Math.random() * 100 + "vw";
+    p.style.animationDuration = 30 + Math.random() * 40 + "s";
+    p.style.animationDelay = Math.random() * 20 + "s";
+    document.body.appendChild(p);
+}
+
+/* ================= GALLERY ENGINE ================= */
+const data = {
+    gallery: { gridId: 'gallery-grid', btnId: 'add-gallery', prefix: 'img', current: 1, total: 100 },
+    quotes: { gridId: 'quotes-grid', btnId: 'add-quotes', prefix: 'quote', current: 1, total: 100 }
+};
+
+function loadBatch(type, amount) {
+    const config = data[type];
+    const grid = document.getElementById(config.gridId);
+    let added = 0;
+    while (added < amount && config.current <= config.total) {
+        const fileName = `${config.prefix}${config.current}.jpeg`;
+        const div = document.createElement('div');
+        div.className = "liquid-glass aspect-square overflow-hidden cursor-pointer group relative";
+        div.innerHTML = `<img src="${fileName}" loading="lazy" onclick="openLightbox('${fileName}')" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700" onerror="this.src='https://via.placeholder.com/400?text=img+missing'">`;
+        grid.appendChild(div);
+        config.current++;
+        added++;
+    }
+    if (config.current > config.total) document.getElementById(config.btnId).style.display = 'none';
+}
+
+function openLightbox(src) {
+    const lb = document.getElementById('lightbox');
+    const img = document.getElementById('lightbox-img');
+    img.src = src;
+    lb.classList.remove('hidden');
+    setTimeout(() => img.classList.add('scale-100'), 10);
+    document.body.style.overflow = 'hidden';
+}
+
+function closeLightbox() {
+    const lb = document.getElementById('lightbox');
+    const img = document.getElementById('lightbox-img');
+    img.classList.remove('scale-100');
+    setTimeout(() => { lb.classList.add('hidden'); document.body.style.overflow = 'auto'; }, 300);
+}
+
+// Initial Load
+loadBatch('gallery', 8);
+loadBatch('quotes', 8);
+</script>
+
 </body>
 </html>
